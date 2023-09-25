@@ -30,7 +30,7 @@ Param.prototype.get = function(callback) {
   var paramClient = new Service({
     ros : this.ros,
     name : '/rosapi/get_param',
-    serviceType : 'rosapi/GetParam'
+    serviceType : 'rosapi_msgs/srv/GetParam'
   });
 
   var request = new ServiceRequest({
@@ -53,7 +53,7 @@ Param.prototype.set = function(value, callback) {
   var paramClient = new Service({
     ros : this.ros,
     name : '/rosapi/set_param',
-    serviceType : 'rosapi/SetParam'
+    serviceType : 'rosapi_msgs/srv/SetParam'
   });
 
   var request = new ServiceRequest({
@@ -73,7 +73,7 @@ Param.prototype.delete = function(callback) {
   var paramClient = new Service({
     ros : this.ros,
     name : '/rosapi/delete_param',
-    serviceType : 'rosapi/DeleteParam'
+    serviceType : 'rosapi_msgs/srv/DeleteParam'
   });
 
   var request = new ServiceRequest({

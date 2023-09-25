@@ -4,6 +4,7 @@
  */
 
 var ActionClient = require('../actionlib/ActionClient');
+var ActionHandle = require('../ros2action/Actions.js')
 var Goal = require('../actionlib/Goal');
 
 var Service = require('../core/Service.js');
@@ -54,19 +55,19 @@ function TFClient(options) {
   this._isDisposed = false;
 
   // Create an Action Client
-  this.actionClient = new ActionClient({
+  this.actionClient = new ActionHandle({
     ros : options.ros,
-    serverName : this.serverName,
-    actionName : 'tf2_web_republisher/TFSubscriptionAction',
-    omitStatus : true,
-    omitResult : true
+    name : this.serverName,
+    actionType : 'tf2_web_republisher/action/TFSubscription',
+    // omitStatus : true,
+    // omitResult : true
   });
 
   // Create a Service Client
   this.serviceClient = new Service({
     ros: options.ros,
     name: this.repubServiceName,
-    serviceType: 'tf2_web_republisher/RepublishTFs'
+    serviceType: 'tf2_web_republisher/srv/RepublishTFs'
   });
 }
 
@@ -159,7 +160,7 @@ TFClient.prototype.processResponse = function(response) {
   this.currentTopic = new Topic({
     ros: this.ros,
     name: response.topic_name,
-    messageType: 'tf2_web_republisher/TFArray'
+    messageType: 'tf2_web_republisher/msg/TFArray'
   });
   this._subscribeCB = this.processTFArray.bind(this);
   this.currentTopic.subscribe(this._subscribeCB);
