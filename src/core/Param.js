@@ -18,7 +18,6 @@ function Param(options) {
   options = options || {};
   this.ros = options.ros;
   this.name = options.name;
-  this.node_name = options.node_name
 }
 
 /**
@@ -78,7 +77,6 @@ Param.prototype.delete = function(callback) {
   });
 
   var request = new ServiceRequest({
-    node_name: this.node_name,
     name : this.name
   });
 
