@@ -45,10 +45,10 @@ Action.prototype.sendGoal = function(request, resultCallback, feedbackCallback, 
     return;
   }
 
-  var actionGoalId = 'send_action_goal:' + this.name + ':' + (++this.ros.idCounter);
+  this.actionGoalId = 'send_action_goal:' + this.name + ':' + (++this.ros.idCounter);
 
   if (resultCallback || failedCallback) {
-    this.ros.on(actionGoalId, function(message) {
+    this.ros.on(this.actionGoalId, function(message) {
       if (message.result !== undefined && message.result === false) {
         if (typeof failedCallback === 'function') {
           failedCallback(message.values);
@@ -63,13 +63,23 @@ Action.prototype.sendGoal = function(request, resultCallback, feedbackCallback, 
 
   var call = {
     op : 'send_action_goal',
-    id : actionGoalId,
+    id : this.actionGoalId,
     action : this.name,
     action_type: this.actionType,
     args : request,
     feedback : true,
   };
   this.ros.callOnConnection(call);
+};
+
+ActionHandle.prototype.cancelGoal = function () {
+  var call = {
+    op: "cancel_action_goal",
+    action: this.name,
+    id: this.actionGoalId,
+  };
+  this.ros.callOnConnection(call);
+
 };
 
 module.exports = Action;
