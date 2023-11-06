@@ -72,7 +72,7 @@ Action.prototype.sendGoal = function(request, resultCallback, feedbackCallback, 
   this.ros.callOnConnection(call);
 };
 
-ActionHandle.prototype.cancelGoal = function () {
+Action.prototype.cancelGoal = function () {
   var call = {
     op: "cancel_action_goal",
     action: this.name,
