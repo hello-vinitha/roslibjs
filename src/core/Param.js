@@ -38,7 +38,7 @@ Param.prototype.get = function(callback) {
   });
 
   paramClient.callService(request, function(result) {
-    var value = JSON.stringify(result.value);
+    var value = JSON.parse(result.value);
     callback(value);
   });
 };
