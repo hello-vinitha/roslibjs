@@ -187,7 +187,7 @@ Ros.prototype.getActionServers = function(callback, failedCallback) {
   var getActionServers = new Service({
     ros : this,
     name : '/rosapi/action_servers',
-    serviceType : 'rosapi/GetActionServers'
+    serviceType : 'rosapi_msgs/srv/GetActionServers'
   });
 
   var request = new ServiceRequest({});
@@ -221,7 +221,7 @@ Ros.prototype.getTopics = function(callback, failedCallback) {
   var topicsClient = new Service({
     ros : this,
     name : '/rosapi/topics',
-    serviceType : 'rosapi/Topics'
+    serviceType : 'rosapi_msgs/srv/Topics'
   });
 
   var request = new ServiceRequest();
@@ -254,7 +254,7 @@ Ros.prototype.getTopicsForType = function(topicType, callback, failedCallback) {
   var topicsForTypeClient = new Service({
     ros : this,
     name : '/rosapi/topics_for_type',
-    serviceType : 'rosapi/TopicsForType'
+    serviceType : 'rosapi_msgs/srv/TopicsForType'
   });
 
   var request = new ServiceRequest({
@@ -277,6 +277,41 @@ Ros.prototype.getTopicsForType = function(topicType, callback, failedCallback) {
 };
 
 /**
+ * Retrieve a list of active publishers for a topic in ROS.
+ *
+ * @param {string} topic - The topic to find publishers for.
+ * @param {function} callback - Function with the following params:
+ * @param {string[]} callback.publishers - Array of publisher names.
+ * @param {function} [failedCallback] - The callback function when the service call failed with params:
+ * @param {string} failedCallback.error - The error message reported by ROS.
+ */
+Ros.prototype.getPublishers = function(topic, callback, failedCallback) {
+  var publishersClient = new Service({
+    ros : this,
+    name : '/rosapi/publishers',
+    serviceType : 'rosapi_msgs/srv/Publishers'
+  });
+
+  var request = new ServiceRequest({
+    topic: topic
+  });
+  if (typeof failedCallback === 'function'){
+    publishersClient.callService(request,
+      function(result) {
+        callback(result.publishers);
+      },
+      function(message){
+        failedCallback(message);
+      }
+    );
+  } else {
+    publishersClient.callService(request, function(result) {
+      callback(result.publishers);
+    });
+  }
+}
+
+/**
  * Retrieve a list of active service names in ROS.
  *
  * @param {function} callback - Function with the following params:
@@ -288,7 +323,7 @@ Ros.prototype.getServices = function(callback, failedCallback) {
   var servicesClient = new Service({
     ros : this,
     name : '/rosapi/services',
-    serviceType : 'rosapi/Services'
+    serviceType : 'rosapi_msgs/srv/Services'
   });
 
   var request = new ServiceRequest();
@@ -321,7 +356,7 @@ Ros.prototype.getServicesForType = function(serviceType, callback, failedCallbac
   var servicesForTypeClient = new Service({
     ros : this,
     name : '/rosapi/services_for_type',
-    serviceType : 'rosapi/ServicesForType'
+    serviceType : 'rosapi_msgs/srv/ServicesForType'
   });
 
   var request = new ServiceRequest({
@@ -357,7 +392,7 @@ Ros.prototype.getActionGoalDetails = function(type, callback, failedCallback) {
   var actionTypeClient = new Service({
     ros : this,
     name : '/rosapi/action_goal_details',
-    serviceType : 'rosapi/ActionGoalDetails'
+    serviceType : 'rosapi_msgs/srv/ActionGoalDetails'
   });
   var request = new ServiceRequest({
     type: type
@@ -393,7 +428,7 @@ Ros.prototype.getActionGoalDetails = function(type, callback, failedCallback) {
   var actionTypeClient = new Service({
     ros : this,
     name : '/rosapi/action_feedback_details',
-    serviceType : 'rosapi/ActionFeedbackDetails'
+    serviceType : 'rosapi_msgs/srv/ActionFeedbackDetails'
   });
   var request = new ServiceRequest({
     type: type
@@ -429,7 +464,7 @@ Ros.prototype.getActionGoalDetails = function(type, callback, failedCallback) {
   var actionTypeClient = new Service({
     ros : this,
     name : '/rosapi/action_result_details',
-    serviceType : 'rosapi/ActionResultDetails'
+    serviceType : 'rosapi_msgs/srv/ActionResultDetails'
   });
   var request = new ServiceRequest({
     type: type
@@ -465,7 +500,7 @@ Ros.prototype.getServiceRequestDetails = function(type, callback, failedCallback
   var serviceTypeClient = new Service({
     ros : this,
     name : '/rosapi/service_request_details',
-    serviceType : 'rosapi/ServiceRequestDetails'
+    serviceType : 'rosapi_msgs/srv/ServiceRequestDetails'
   });
   var request = new ServiceRequest({
     type: type
@@ -501,7 +536,7 @@ Ros.prototype.getServiceResponseDetails = function(type, callback, failedCallbac
   var serviceTypeClient = new Service({
     ros : this,
     name : '/rosapi/service_response_details',
-    serviceType : 'rosapi/ServiceResponseDetails'
+    serviceType : 'rosapi_msgs/srv/ServiceResponseDetails'
   });
   var request = new ServiceRequest({
     type: type
@@ -535,7 +570,7 @@ Ros.prototype.getNodes = function(callback, failedCallback) {
   var nodesClient = new Service({
     ros : this,
     name : '/rosapi/nodes',
-    serviceType : 'rosapi/Nodes'
+    serviceType : 'rosapi_msgs/srv/Nodes'
   });
 
   var request = new ServiceRequest();
@@ -587,7 +622,7 @@ Ros.prototype.getNodeDetails = function(node, callback, failedCallback) {
   var nodesClient = new Service({
     ros : this,
     name : '/rosapi/node_details',
-    serviceType : 'rosapi/NodeDetails'
+    serviceType : 'rosapi_msgs/srv/NodeDetails'
   });
 
   var request = new ServiceRequest({
@@ -621,7 +656,7 @@ Ros.prototype.getParams = function(callback, failedCallback) {
   var paramsClient = new Service({
     ros : this,
     name : '/rosapi/get_param_names',
-    serviceType : 'rosapi/GetParamNames'
+    serviceType : 'rosapi_msgs/srv/GetParamNames'
   });
   var request = new ServiceRequest();
   if (typeof failedCallback === 'function'){
@@ -653,7 +688,7 @@ Ros.prototype.getParams = function(callback, failedCallback) {
   var actionTypeClient = new Service({
     ros : this,
     name : '/rosapi/action_type',
-    serviceType : 'rosapi/ActionType'
+    serviceType : 'rosapi_msgs/srv/ActionType'
   });
   var request = new ServiceRequest({
     action: action
@@ -688,7 +723,7 @@ Ros.prototype.getTopicType = function(topic, callback, failedCallback) {
   var topicTypeClient = new Service({
     ros : this,
     name : '/rosapi/topic_type',
-    serviceType : 'rosapi/TopicType'
+    serviceType : 'rosapi_msgs/srv/TopicType'
   });
   var request = new ServiceRequest({
     topic: topic
@@ -723,7 +758,7 @@ Ros.prototype.getServiceType = function(service, callback, failedCallback) {
   var serviceTypeClient = new Service({
     ros : this,
     name : '/rosapi/service_type',
-    serviceType : 'rosapi/ServiceType'
+    serviceType : 'rosapi_msgs/srv/ServiceType'
   });
   var request = new ServiceRequest({
     service: service
@@ -758,7 +793,7 @@ Ros.prototype.getMessageDetails = function(message, callback, failedCallback) {
   var messageDetailClient = new Service({
     ros : this,
     name : '/rosapi/message_details',
-    serviceType : 'rosapi/MessageDetails'
+    serviceType : 'rosapi_msgs/srv/MessageDetails'
   });
   var request = new ServiceRequest({
     type: message
@@ -846,7 +881,7 @@ Ros.prototype.getTopicsAndRawTypes = function(callback, failedCallback) {
   var topicsAndRawTypesClient = new Service({
     ros : this,
     name : '/rosapi/topics_and_raw_types',
-    serviceType : 'rosapi/TopicsAndRawTypes'
+    serviceType : 'rosapi_msgs/srv/TopicsAndRawTypes'
   });
 
   var request = new ServiceRequest();
